@@ -60,7 +60,7 @@ jobs:
               "eduardo-p.png",
               "fernanda-l.png",
           ]:
-              text = text.replace(f'`${{ASSET_BASE}}/{filename}`', f'"/{filename}"')
+              text = text.replace('`${ASSET_BASE}/' + filename + '`', '"/' + filename + '"')
           index.write_text(text, encoding="utf-8")
 
           root = Path("src/routes/__root.tsx")
