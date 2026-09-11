@@ -1,0 +1,45 @@
+name: Fix asset base
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/fix-asset-base.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Update asset base
+        shell: python
+        run: |
+          from pathlib import Path
+
+          old = "https://duplicate-your-sales.lovable.app"
+          new = "https://superlovable-lp.vercel.app"
+
+          for path in ["src/routes/index.tsx", "src/routes/__root.tsx"]:
+              file = Path(path)
+              text = file.read_text(encoding="utf-8")
+              if old not in text:
+                  raise SystemExit(f"Domínio antigo não encontrado em {path}")
+              file.write_text(text.replace(old, new), encoding="utf-8")
+
+      - name: Validate build
+        run: npm install --no-audit --no-fund && npm run build
+
+      - name: Commit fix
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/routes/index.tsx src/routes/__root.tsx
+          git commit -m "fix: usar assets do deploy estável da landing portuguesa"
+          git push origin main
