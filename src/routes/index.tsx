@@ -12,7 +12,7 @@ import { Section } from "@/components/Section";
 import { CtaButton } from "@/components/CtaButton";
 import { cn } from "@/lib/utils";
 
-const ASSET_BASE = "https://duplicate-your-sales.lovable.app";
+const ASSET_BASE = "https://superlovable-lp.vercel.app";
 
 export const Route = createFileRoute("/")({
   head: () => ({
