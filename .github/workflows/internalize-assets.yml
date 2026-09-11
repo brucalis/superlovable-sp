@@ -1,0 +1,80 @@
+name: Internalize Spanish assets
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/internalize-assets.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Copy image assets into Spanish repository
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public
+          base="https://superlovable-lp.vercel.app"
+          for file in \
+            carlos-r.png \
+            comparacao-com-extensao.webp \
+            creditos-esgotados.webp \
+            eduardo-p.png \
+            favicon.ico \
+            fernanda-l.png \
+            juliana-s.png \
+            marina-a.png \
+            rafael.png
+          do
+            curl -fL --retry 3 "$base/$file" -o "public/$file"
+            test -s "public/$file"
+          done
+
+      - name: Switch Spanish page to local assets
+        shell: python
+        run: |
+          from pathlib import Path
+
+          index = Path("src/routes/index.tsx")
+          text = index.read_text(encoding="utf-8")
+          text = text.replace('const ASSET_BASE = "https://superlovable-lp.vercel.app";\n\n', '')
+          for filename in [
+              "creditos-esgotados.webp",
+              "comparacao-com-extensao.webp",
+              "rafael.png",
+              "juliana-s.png",
+              "carlos-r.png",
+              "marina-a.png",
+              "eduardo-p.png",
+              "fernanda-l.png",
+          ]:
+              text = text.replace('`${ASSET_BASE}/' + filename + '`', '"/' + filename + '"')
+          index.write_text(text, encoding="utf-8")
+
+          root = Path("src/routes/__root.tsx")
+          root_text = root.read_text(encoding="utf-8")
+          root_text = root_text.replace(
+              'https://superlovable-lp.vercel.app/favicon.ico',
+              '/favicon.ico',
+          )
+          root.write_text(root_text, encoding="utf-8")
+
+      - name: Validate build
+        run: npm install --no-audit --no-fund && npm run build
+
+      - name: Commit independent assets
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public src/routes/index.tsx src/routes/__root.tsx
+          git commit -m "chore: internalizar assets da landing espanhola"
+          git push origin main
