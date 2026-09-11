@@ -12,8 +12,6 @@ import { Section } from "@/components/Section";
 import { CtaButton } from "@/components/CtaButton";
 import { cn } from "@/lib/utils";
 
-const ASSET_BASE = "https://superlovable-lp.vercel.app";
-
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -237,7 +235,7 @@ function ComparisonSection() {
               <span className="text-[11px] font-bold uppercase tracking-wider text-red-300/70">Antes</span>
             </div>
             <img
-              src={`${ASSET_BASE}/creditos-esgotados.webp`}
+              src={"/creditos-esgotados.webp"}
               alt="Usuario preocupado después de quedarse sin créditos en Lovable"
               className="h-auto w-full rounded-[1.45rem] object-contain"
               loading="lazy"
@@ -261,7 +259,7 @@ function ComparisonSection() {
               <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-300/70">Después</span>
             </div>
             <img
-              src={`${ASSET_BASE}/comparacao-com-extensao.webp`}
+              src={"/comparacao-com-extensao.webp"}
               alt="Super Lovable activa en un navegador con un usuario feliz celebrando"
               className="h-auto w-full rounded-[1.45rem] object-cover"
               loading="lazy"
@@ -286,12 +284,12 @@ function ComparisonSection() {
 }
 
 const testimonials = [
-  { content: "Ya había comprado tres extensiones que dejaban de funcionar después de pocos días. Super Lovable fue la primera que realmente se mantuvo estable. Hoy la uso prácticamente todo el día sin interrupciones.", author: "Rafael M.", role: "Afiliado y Gestor de Tráfico", metric: "+180 proyectos", image: `${ASSET_BASE}/rafael.png` },
-  { content: "Antes perdía horas esperando a que regresaran los créditos. Ahora puedo desarrollar una landing page completa y todavía terminar mi aplicación el mismo día.", author: "Juliana S.", role: "Infoproductora", metric: "10 h ahorradas/semana", image: `${ASSET_BASE}/juliana-s.png` },
-  { content: "No soy programador. La instalé, la activé y en pocos minutos ya la estaba usando normalmente. Mucho más simple de lo que imaginaba.", author: "Carlos R.", role: "Emprendedor Digital", metric: "1.er proyecto en 15 min", image: `${ASSET_BASE}/carlos-r.png` },
-  { content: "Solo lo que ahorré al dejar de pagar otras herramientas ya compensó la inversión. Valió cada centavo.", author: "Marina A.", role: "Dueña de E-commerce", metric: "+R$ 2.300 ahorrados", image: `${ASSET_BASE}/marina-a.png` },
-  { content: "Ahora puedo mantener varios proyectos abiertos al mismo tiempo sin preocuparme por gastar créditos. Mi productividad se multiplicó.", author: "Eduardo P.", role: "Freelancer", metric: "Mucho más productividad", image: `${ASSET_BASE}/eduardo-p.png` },
-  { content: "La cola automática y el optimizador de prompts cambiaron por completo mi flujo de trabajo. Ya no necesito estar pegada a la pantalla y el resultado de los proyectos es mucho mejor.", author: "Fernanda L.", role: "Diseñadora y Creadora de Apps", metric: "+40 prompts/día", image: `${ASSET_BASE}/fernanda-l.png` },
+  { content: "Ya había comprado tres extensiones que dejaban de funcionar después de pocos días. Super Lovable fue la primera que realmente se mantuvo estable. Hoy la uso prácticamente todo el día sin interrupciones.", author: "Rafael M.", role: "Afiliado y Gestor de Tráfico", metric: "+180 proyectos", image: "/rafael.png" },
+  { content: "Antes perdía horas esperando a que regresaran los créditos. Ahora puedo desarrollar una landing page completa y todavía terminar mi aplicación el mismo día.", author: "Juliana S.", role: "Infoproductora", metric: "10 h ahorradas/semana", image: "/juliana-s.png" },
+  { content: "No soy programador. La instalé, la activé y en pocos minutos ya la estaba usando normalmente. Mucho más simple de lo que imaginaba.", author: "Carlos R.", role: "Emprendedor Digital", metric: "1.er proyecto en 15 min", image: "/carlos-r.png" },
+  { content: "Solo lo que ahorré al dejar de pagar otras herramientas ya compensó la inversión. Valió cada centavo.", author: "Marina A.", role: "Dueña de E-commerce", metric: "+R$ 2.300 ahorrados", image: "/marina-a.png" },
+  { content: "Ahora puedo mantener varios proyectos abiertos al mismo tiempo sin preocuparme por gastar créditos. Mi productividad se multiplicó.", author: "Eduardo P.", role: "Freelancer", metric: "Mucho más productividad", image: "/eduardo-p.png" },
+  { content: "La cola automática y el optimizador de prompts cambiaron por completo mi flujo de trabajo. Ya no necesito estar pegada a la pantalla y el resultado de los proyectos es mucho mejor.", author: "Fernanda L.", role: "Diseñadora y Creadora de Apps", metric: "+40 prompts/día", image: "/fernanda-l.png" },
 ];
 
 function TestimonialsSection() {
