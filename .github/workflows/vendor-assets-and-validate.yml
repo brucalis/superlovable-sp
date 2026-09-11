@@ -1,87 +1,24 @@
-name: Vendor assets and validate
+name: Validate Spanish build
 
 on:
   push:
     branches: [main]
     paths:
       - ".github/workflows/vendor-assets-and-validate.yml"
+      - "src/**"
+      - "package.json"
+      - "vite.config.ts"
+      - "tsconfig.json"
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  vendor-and-build:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Download assets from current public landing page
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p public
-          base="https://duplicate-your-sales.lovable.app"
-          for file in \
-            carlos-r.png \
-            comparacao-com-extensao.webp \
-            creditos-esgotados.png \
-            creditos-esgotados.webp \
-            eduardo-p.png \
-            favicon.ico \
-            fernanda-l.png \
-            hero-super-lovable.webp \
-            juliana-s.png \
-            marina-a.png \
-            oportunidade-revenda.webp \
-            rafael.png \
-            robots.txt \
-            super-lovable-extensao.webp
-          do
-            curl -fL --retry 3 "$base/$file" -o "public/$file"
-          done
-
-      - name: Make Spanish project self-contained
-        shell: python
-        run: |
-          from pathlib import Path
-
-          index = Path("src/routes/index.tsx")
-          text = index.read_text(encoding="utf-8")
-          text = text.replace('const ASSET_BASE = "https://duplicate-your-sales.lovable.app";\n\n', '')
-          for filename in [
-              "creditos-esgotados.webp",
-              "comparacao-com-extensao.webp",
-              "rafael.png",
-              "juliana-s.png",
-              "carlos-r.png",
-              "marina-a.png",
-              "eduardo-p.png",
-              "fernanda-l.png",
-          ]:
-              text = text.replace('`${ASSET_BASE}/' + filename + '`', '"/' + filename + '"')
-          index.write_text(text, encoding="utf-8")
-
-          root = Path("src/routes/__root.tsx")
-          root_text = root.read_text(encoding="utf-8")
-          root_text = root_text.replace(
-              'https://duplicate-your-sales.lovable.app/favicon.ico',
-              '/favicon.ico',
-          )
-          root.write_text(root_text, encoding="utf-8")
-
-      - name: Install dependencies and build
-        run: npm install --no-audit --no-fund && npm run build
-
-      - name: Commit vendored assets
-        shell: bash
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public src/routes/index.tsx src/routes/__root.tsx
-          if git diff --cached --quiet; then
-            exit 0
-          fi
-          git commit -m "chore: internalizar assets e validar build da versão espanhola"
-          git push origin main
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Build
+        run: npm run build
