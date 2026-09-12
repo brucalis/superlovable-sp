@@ -31,7 +31,6 @@ jobs:
           REG = font_path('Inter:style=Regular')
           MED = font_path('Inter:style=Medium')
           SEMI = font_path('Inter:style=Semi Bold')
-          BOLD = font_path('Inter:style=Bold')
 
           def avg_color(im, xy, r=3):
               x,y=xy
@@ -71,59 +70,38 @@ jobs:
               os.replace(tmp,path)
               print(f'{path}: original={original_size} bytes -> final={chosen[1]} bytes, quality={chosen[0]}')
 
-          # 1) Credits exhausted artwork
           path='public/creditos-esgotados.webp'
           original=os.path.getsize(path)
           im=Image.open(path).convert('RGB')
           d=ImageDraw.Draw(im)
-
-          # Header title/subtitle
           cover(d,im,(102,124,700,168),(735,145))
           put(d,(110,128),'Planes y uso de créditos',590,34,(242,242,244),SEMI)
           cover(d,im,(104,178,760,214),(780,194))
           put(d,(110,181),'Gestiona tu plan de suscripción y saldo de crédito.',640,24,(168,169,175),REG)
-
-          # Alert copy (preserve icon/border)
           cover(d,im,(166,260,1058,298),(1035,282))
           put(d,(174,264),'Te quedaste sin créditos.',430,25,(252,74,65),SEMI)
           cover(d,im,(166,304,1058,340),(1035,326))
           put(d,(175,308),'Actualiza tu plan para agregar créditos y evitar que tus proyectos se pausen.',875,20,(190,174,176),REG)
-
-          # Main panel title/subtitle
           cover(d,im,(128,423,805,475),(810,448))
           put(d,(136,428),'Planes y uso de créditos',635,40,(241,241,243),SEMI)
           cover(d,im,(128,488,820,532),(825,508))
           put(d,(136,494),'Gestiona tu plan de suscripción y saldo de crédito.',660,27,(160,161,168),REG)
-
-          # Manage button
           cover(d,im,(478,618,596,658),(586,642))
           put(d,(485,626),'Gestionar',101,21,(204,205,210),MED)
-
-          # Included use
           cover(d,im,(272,669,535,711),(565,690))
           put(d,(280,674),'Uso gratuito incluido',230,25,(158,159,166),REG)
-
-          # Daily credits label
           cover(d,im,(168,784,620,827),(660,807))
           put(d,(176,789),'Créditos de construcción diarios',410,27,(222,223,226),MED)
-
-          # Reset time
           cover(d,im,(168,891,585,930),(620,908))
           put(d,(176,895),'Se reinicia a medianoche UTC',385,24,(150,151,158),REG)
-
           save_webp_under(path,im,original)
 
-          # 2) Extension comparison artwork
           path='public/comparacao-com-extensao.webp'
           original=os.path.getsize(path)
           im=Image.open(path).convert('RGB')
           d=ImageDraw.Draw(im)
-
-          # Connection label
           cover(d,im,(96,191,252,217),(254,204))
           put(d,(100,194),'Proyecto conectado',150,17,(183,184,194),REG)
-
-          # Status chips
           cover(d,im,(104,232,169,261),(174,248))
           put(d,(112,240),'Proyecto',58,15,(77,226,194),MED)
           cover(d,im,(190,232,332,261),(334,248))
@@ -132,54 +110,32 @@ jobs:
           put(d,(346,240),'Cola pausada',77,14,(169,170,181),REG)
           cover(d,im,(454,232,512,261),(514,248))
           put(d,(462,240),'Sonido',46,14,(169,170,181),REG)
-          # Escudo is already Spanish; preserve it.
-
-          # Tabs
           cover(d,im,(236,282,286,312),(295,299))
           put(d,(247,291),'Cola',39,16,(173,174,185),MED)
-          # Histórico is identical in Spanish.
           cover(d,im,(438,282,554,313),(560,300))
           put(d,(447,291),'Herramientas',104,15,(173,174,185),MED)
           cover(d,im,(568,282,696,313),(700,300))
           put(d,(577,291),'Configuración',116,15,(173,174,185),MED)
-
-          # Optimization heading + mode
           cover(d,im,(96,339,300,364),(310,352))
           put(d,(100,343),'MODO DE OPTIMIZACIÓN',190,13,(143,144,158),MED)
           cover(d,im,(564,339,684,362),(690,352))
           put(d,(570,343),'Modo: Automático',108,13,(186,151,245),MED)
-
-          # Automatic option and description
-          # 'Automático' itself is identical; translate description only
           cover(d,im,(154,398,345,420),(350,409))
           put(d,(160,401),'Elige el mejor enfoque.',178,14,(143,144,158),REG)
-
-          # GPT-5 description
           cover(d,im,(154,451,345,474),(350,462))
           put(d,(160,454),'Lógica, arquitectura y código.',180,13,(143,144,158),REG)
-
-          # Gemini description
           cover(d,im,(154,502,350,523),(355,513))
           put(d,(160,505),'Contexto amplio y razonamiento.',185,13,(143,144,158),REG)
-
-          # Claude description
           cover(d,im,(154,553,372,575),(378,564))
           put(d,(160,556),'Claridad, creatividad e interfaz.',205,13,(143,144,158),REG)
-
-          # Prompt placeholder
           cover(d,im,(108,593,455,622),(465,608))
           put(d,(114,598),'Describe lo que deseas crear o modificar...',332,14,(119,120,134),REG)
-
-          # Prompt helper buttons
           cover(d,im,(226,669,310,696),(315,682))
           put(d,(233,674),'Más claro',70,14,(185,186,197),MED)
           cover(d,im,(432,669,556,696),(560,682))
           put(d,(441,674),'Mejorar prompt',108,14,(185,186,197),MED)
-
-          # Add to queue
           cover(d,im,(130,711,248,742),(252,726))
           put(d,(137,718),'Añadir a la cola',108,14,(182,183,194),MED)
-
           save_webp_under(path,im,original)
           PY
       - name: Verify Spanish OCR
@@ -193,7 +149,7 @@ jobs:
           PY
       - name: Validate app build
         run: |
-          npm ci
+          npm install --no-audit --no-fund
           npm run build
       - name: Commit translated compressed images
         run: |
