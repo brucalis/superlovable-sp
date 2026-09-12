@@ -175,7 +175,7 @@ function Hero() {
           <div className="glass-strong relative rounded-[2rem] p-3 shadow-glow">
             <div className="relative aspect-video w-full overflow-hidden rounded-[1.5rem] bg-black shadow-2xl">
               <img
-                src="/hero-superlovable.webp"
+                src="https://i.ibb.co/KxVQh8WP/8bf4f36f-a7c5-49c9-9700-b2acd2401941.png"
                 alt="Super Lovable ilimitada"
                 className="h-full w-full object-cover"
                 loading="eager"
