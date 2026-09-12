@@ -1,0 +1,115 @@
+name: Replace hero player
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/replace-hero-player.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  replace:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build hero image asset
+        run: |
+          cat .github/tmp/hero_*.b64 | base64 -d > public/hero-superlovable.webp
+          file public/hero-superlovable.webp
+          test "$(stat -c%s public/hero-superlovable.webp)" -gt 50000
+
+      - name: Replace video player with static image
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('src/routes/index.tsx')
+          s = p.read_text()
+
+          old_import = 'import { ArrowRight, Check, Play, Shield, Sparkles, Star, Timer, X } from "lucide-react";'
+          new_import = 'import { ArrowRight, Check, Shield, Sparkles, Star, Timer, X } from "lucide-react";'
+          if old_import not in s:
+              raise SystemExit('Play import not found; refusing partial replacement')
+          s = s.replace(old_import, new_import, 1)
+
+          old_header = '''function Hero() {
+            const [videoStarted, setVideoStarted] = useState(false);
+
+            return ('''.replace('          ', '')
+          new_header = '''function Hero() {
+            return ('''.replace('          ', '')
+          if old_header not in s:
+              raise SystemExit('Hero video state not found; refusing partial replacement')
+          s = s.replace(old_header, new_header, 1)
+
+          old = '''        <Reveal delay={200} className="relative">
+          <div className="glass-strong relative rounded-[2rem] p-3 shadow-glow">
+            <div className="relative aspect-video w-full overflow-hidden rounded-[1.5rem] bg-black shadow-2xl">
+              {videoStarted ? (
+                <iframe
+                  src="https://www.youtube-nocookie.com/embed/ZXh1LKiESDs?autoplay=1&controls=1&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3"
+                  title="Conoce Super Lovable"
+                  className="absolute inset-0 h-full w-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setVideoStarted(true)}
+                  className="group absolute inset-0 w-full overflow-hidden text-left"
+                  aria-label="Reproducir video sobre Super Lovable"
+                >
+                  <img
+                    src="https://i.ytimg.com/vi/ZXh1LKiESDs/maxresdefault.jpg"
+                    alt="Mira el video y conoce Super Lovable"
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02] group-hover:brightness-75"
+                  />
+                  <span className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/10" />
+                  <span className="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-gradient-to-br from-[#ff2dbb] to-[#8b5cf6] text-white shadow-[0_0_35px_rgba(255,45,187,0.72)] ring-4 ring-white/20">
+                    <Play className="ml-1 h-9 w-9 fill-current" />
+                  </span>
+                </button>
+              )}
+            </div>
+          </div>
+        </Reveal>'''
+
+          new = '''        <Reveal delay={200} className="relative">
+          <div className="glass-strong relative rounded-[2rem] p-3 shadow-glow">
+            <div className="relative aspect-video w-full overflow-hidden rounded-[1.5rem] bg-black shadow-2xl">
+              <img
+                src="/hero-superlovable.webp"
+                alt="Super Lovable ilimitada"
+                className="h-full w-full object-cover"
+                loading="eager"
+                fetchPriority="high"
+              />
+            </div>
+          </div>
+        </Reveal>'''
+
+          if old not in s:
+              raise SystemExit('Player block not found; refusing partial replacement')
+          s = s.replace(old, new, 1)
+          p.write_text(s)
+          PY
+
+      - name: Remove temporary image chunks
+        run: rm -rf .github/tmp
+
+      - name: Validate build
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+
+      - name: Commit change
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'feat: substituir vídeo da hero por imagem' || exit 0
+          git push
