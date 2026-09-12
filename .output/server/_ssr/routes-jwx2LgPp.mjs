@@ -1,0 +1,818 @@
+import { n as __toESM } from "../_runtime.mjs";
+import { a as Trigger2, c as require_react, i as Root2, n as Header$1, r as Item, s as require_jsx_runtime, t as Content2 } from "../_libs/@radix-ui/react-accordion+[...].mjs";
+import { a as Shield, c as ArrowRight, i as Sparkles, n as Timer, o as ChevronDown, r as Star, s as Check, t as X } from "../_libs/lucide-react.mjs";
+import { t as clsx } from "../_libs/clsx.mjs";
+import { t as twMerge } from "../_libs/tailwind-merge.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-jwx2LgPp.js
+var import_react = /* @__PURE__ */ __toESM(require_react());
+var import_jsx_runtime = require_jsx_runtime();
+function cn(...inputs) {
+	return twMerge(clsx(inputs));
+}
+var Accordion = Root2;
+var AccordionItem = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Item, {
+	ref,
+	className: cn("border-b", className),
+	...props
+}));
+AccordionItem.displayName = "AccordionItem";
+var AccordionTrigger = import_react.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Header$1, {
+	className: "flex",
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Trigger2, {
+		ref,
+		className: cn("flex flex-1 items-center justify-between py-4 text-sm font-medium cursor-pointer transition-all hover:underline text-left [&[data-state=open]>svg]:rotate-180", className),
+		...props,
+		children: [children, /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronDown, { className: "h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" })]
+	})
+}));
+AccordionTrigger.displayName = Trigger2.displayName;
+var AccordionContent = import_react.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Content2, {
+	ref,
+	className: "overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
+	...props,
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: cn("pb-4 pt-0", className),
+		children
+	})
+}));
+AccordionContent.displayName = Content2.displayName;
+function Reveal({ children, className, delay = 0 }) {
+	const ref = (0, import_react.useRef)(null);
+	const [visible, setVisible] = (0, import_react.useState)(false);
+	(0, import_react.useEffect)(() => {
+		const el = ref.current;
+		if (!el) return;
+		const observer = new IntersectionObserver((entries) => {
+			if (entries[0]?.isIntersecting) {
+				setVisible(true);
+				observer.disconnect();
+			}
+		}, {
+			threshold: .12,
+			rootMargin: "0px 0px -40px 0px"
+		});
+		observer.observe(el);
+		return () => observer.disconnect();
+	}, []);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		ref,
+		style: { transitionDelay: `${delay}ms` },
+		className: cn("transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform", visible ? "translate-y-0 scale-100 opacity-100" : "translate-y-6 scale-[0.98] opacity-0", className),
+		children
+	});
+}
+function Section({ id, eyebrow, title, subtitle, children, className, center = true }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+		id,
+		className: cn("relative scroll-mt-32 px-5 py-20 sm:px-8 md:py-28", className),
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mx-auto w-full max-w-6xl",
+			children: [(eyebrow || title || subtitle) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Reveal, {
+				className: cn("mb-12 md:mb-16", center && "text-center"),
+				children: [
+					eyebrow ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "glass inline-flex items-center rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary",
+						children: eyebrow
+					}) : null,
+					title ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+						className: "mt-5 text-balance text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl",
+						children: title
+					}) : null,
+					subtitle ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: cn("mt-4 text-pretty text-base text-muted-foreground sm:text-lg", center && "mx-auto max-w-2xl"),
+						children: subtitle
+					}) : null
+				]
+			}), children]
+		})
+	});
+}
+var sizes = {
+	sm: "h-10 px-4 text-[13px]",
+	md: "h-12 px-6 text-sm",
+	lg: "h-14 px-8 text-base"
+};
+function CtaButton({ href, children, variant = "primary", size = "md", className, target, rel }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+		href,
+		target,
+		rel,
+		className: cn("group relative inline-flex items-center justify-center gap-2 rounded-full font-semibold tracking-tight transition-all duration-300 ease-out active:scale-[0.98]", sizes[size], variant === "primary" ? "bg-brand text-primary-foreground shadow-[0_10px_30px_-12px_oklch(0.7_0.23_350/0.7)] hover:-translate-y-0.5 hover:shadow-glow" : "glass text-foreground hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary", className),
+		children
+	});
+}
+var CYCLE = 780;
+function useCountdown() {
+	const [leftMs, setLeftMs] = (0, import_react.useState)(CYCLE * 1e3);
+	const startedAt = (0, import_react.useRef)(null);
+	(0, import_react.useEffect)(() => {
+		startedAt.current = Date.now();
+		const tick = () => {
+			const now = Date.now();
+			const elapsed = now - (startedAt.current ?? now);
+			const remaining = Math.max(0, CYCLE * 1e3 - elapsed % (CYCLE * 1e3));
+			setLeftMs(remaining);
+		};
+		tick();
+		const id = window.setInterval(tick, 10);
+		return () => window.clearInterval(id);
+	}, []);
+	const totalSeconds = Math.floor(leftMs / 1e3);
+	const minutes = Math.floor(totalSeconds / 60);
+	const seconds = totalSeconds % 60;
+	const ms = Math.floor(leftMs % 1e3 / 10);
+	return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}:${String(ms).padStart(2, "0")}`;
+}
+function Countdown() {
+	const formatted = useCountdown();
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+		className: "inline-flex animate-pulse-gentle items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-[14px] font-black tabular-nums text-white shadow-[0_0_15px_rgba(220,38,38,0.5)] ring-2 ring-white/30",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Timer, { className: "h-4 w-4" }), formatted]
+	});
+}
+function useClientDate() {
+	const [date, setDate] = (0, import_react.useState)(null);
+	(0, import_react.useEffect)(() => {
+		setDate(new Intl.DateTimeFormat("es-419", {
+			day: "2-digit",
+			month: "2-digit",
+			year: "numeric"
+		}).format(/* @__PURE__ */ new Date()));
+	}, []);
+	return date;
+}
+function Header() {
+	const date = useClientDate();
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
+		className: "sticky top-0 z-50",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "bg-[#FF2DBB] shadow-[0_10px_40px_-12px_rgba(255,45,187,0.55)]",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "mx-auto flex min-h-[4rem] max-w-7xl items-center justify-center gap-4 px-4 py-3 sm:px-8",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-center",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-[13px] font-black text-white sm:text-[15px]",
+							children: "Super Lovable sin límites por R$ 19,90"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "text-[13px] font-bold text-white/90 sm:text-[15px]",
+							children: ["🔥 Solo hoy ", date ? `(${date})` : "(...)"]
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Countdown, {})]
+				})
+			})
+		})
+	});
+}
+var heroBullets = [
+	"Trabaja sin interrupciones",
+	"Se instala en menos de un minuto",
+	"Interfaz extremadamente simple",
+	"Sigue usando Lovable normalmente"
+];
+var heroSeals = [
+	"Funciona con Lovable gratis",
+	"Se instala en menos de 1 minuto",
+	"Más de 14.782 usuarios"
+];
+function Hero() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		id: "topo",
+		className: "relative overflow-hidden px-5 pb-20 pt-16 sm:px-8 md:pb-28 md:pt-24",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute -top-40 left-1/2 h-[38rem] w-[70rem] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,oklch(0.7_0.23_350/0.16),transparent_65%)] blur-2xl" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "relative mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "inline-flex items-center gap-2 rounded-full bg-[#10b981] px-3.5 py-1.5 text-[11.5px] font-black uppercase tracking-[0.05em] text-white shadow-[0_0_15px_rgba(16,185,129,0.3)]",
+					children: "🛡️ ¡Método blindado! La única extensión que sigue funcionando sin fallar"
+				}) }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
+					delay: 80,
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
+						className: "mt-6 text-balance text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl",
+						children: [
+							"Nunca vuelvas a quedarte sin ",
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-gradient",
+								children: "créditos"
+							}),
+							" en Lovable."
+						]
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
+					delay: 160,
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-5 max-w-xl text-pretty text-base text-muted-foreground sm:text-lg",
+						children: "Nunca más interrumpas un proyecto porque se acabaron tus créditos. Sigue creando normalmente de principio a fin."
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
+					delay: 240,
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+						className: "mt-8 grid gap-2.5 sm:grid-cols-2",
+						children: heroBullets.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+							className: "flex items-center gap-2.5 text-[14px] text-foreground/90",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/15",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, {
+									className: "h-3 w-3 text-primary",
+									strokeWidth: 3
+								})
+							}), item]
+						}, item))
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
+					delay: 320,
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "mt-9",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CtaButton, {
+							href: "#planos",
+							size: "lg",
+							children: ["EMPEZAR AHORA ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4 transition-transform group-hover:translate-x-1" })]
+						})
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
+					delay: 380,
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+						className: "mt-5 flex flex-wrap items-center gap-x-5 gap-y-2",
+						children: heroSeals.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+							className: "flex items-center gap-1.5 text-[12.5px] font-medium text-foreground/80",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, {
+								className: "h-3.5 w-3.5 text-primary",
+								strokeWidth: 3
+							}), item]
+						}, item))
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
+					delay: 440,
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+						className: "mt-4 flex items-center gap-2 text-xs text-muted-foreground",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Shield, { className: "h-3.5 w-3.5 text-primary" }), " 7 días de garantía • Todo sin límites por R$ 19,90"]
+					})
+				})
+			] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
+				delay: 200,
+				className: "relative",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "glass-strong relative rounded-[2rem] p-3 shadow-glow",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "relative aspect-video w-full overflow-hidden rounded-[1.5rem] bg-black shadow-2xl",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+							src: "/hero-superlovable.webp",
+							alt: "Super Lovable ilimitada",
+							className: "h-full w-full object-cover",
+							loading: "eager",
+							fetchPriority: "high"
+						})
+					})
+				})
+			})]
+		})]
+	});
+}
+var comparisonSteps = [
+	{
+		number: "01",
+		title: "Instala",
+		text: "Agrega la extensión a Chrome en pocos segundos."
+	},
+	{
+		number: "02",
+		title: "Activa",
+		text: "Usa tu licencia y deja Super Lovable lista."
+	},
+	{
+		number: "03",
+		title: "Empieza a usarla",
+		text: "Vuelve a tus proyectos sin interrupciones ni límites."
+	}
+];
+function ComparisonSection() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Section, {
+		id: "comparacion",
+		eyebrow: "Antes y después",
+		title: "De proyectos interrumpidos a Lovable sin límites.",
+		subtitle: "Mira la diferencia entre depender de los créditos y crear con Super Lovable activa.",
+		className: "overflow-hidden",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "grid items-stretch gap-5 lg:grid-cols-2",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
+				className: "glass-strong relative h-full overflow-hidden rounded-[2rem] border-red-500/25 p-3",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "mb-3 flex items-center justify-between px-2 pt-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "inline-flex items-center gap-2 rounded-full bg-red-500/15 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.14em] text-red-300",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, {
+								className: "h-3.5 w-3.5",
+								strokeWidth: 3
+							}), " Sin extensión"]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-[11px] font-bold uppercase tracking-wider text-red-300/70",
+							children: "Antes"
+						})]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+						src: "/creditos-esgotados.webp",
+						alt: "Usuario preocupado después de quedarse sin créditos en Lovable",
+						className: "h-auto w-full rounded-[1.45rem] object-contain",
+						loading: "lazy"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "space-y-2 px-2 pb-3 pt-5",
+						children: [
+							"Proyectos interrumpidos a mitad del trabajo",
+							"Horas esperando a que regresen los créditos",
+							"Ideas detenidas antes de estar listas"
+						].map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+							className: "flex items-start gap-2 text-[13px] text-foreground/80 sm:text-sm",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, {
+									className: "mt-0.5 h-4 w-4 shrink-0 text-red-400",
+									strokeWidth: 3
+								}),
+								" ",
+								item
+							]
+						}, item))
+					})
+				]
+			}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
+				delay: 120,
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
+					className: "relative h-full overflow-hidden rounded-[2rem] border border-emerald-400/35 bg-[linear-gradient(145deg,rgba(16,185,129,0.10),oklch(0.18_0.04_265/0.94))] p-3",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "mb-3 flex items-center justify-between px-2 pt-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "inline-flex items-center gap-2 rounded-full bg-emerald-500/15 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.14em] text-emerald-300",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, {
+									className: "h-3.5 w-3.5",
+									strokeWidth: 3
+								}), " Con extensión"]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[11px] font-bold uppercase tracking-wider text-emerald-300/70",
+								children: "Después"
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+							src: "/comparacao-com-extensao.webp",
+							alt: "Super Lovable activa en un navegador con un usuario feliz celebrando",
+							className: "h-auto w-full rounded-[1.45rem] object-cover",
+							loading: "lazy"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "px-2 pb-3 pt-5",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+								className: "text-xl font-black leading-tight sm:text-2xl",
+								children: "Usa Lovable sin interrupciones ni límites en solo un minuto."
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "mt-4 grid gap-2.5 sm:grid-cols-3",
+								children: comparisonSteps.map((step) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "rounded-xl border border-emerald-400/15 bg-emerald-500/[0.07] p-3",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-[10px] font-black tracking-[0.16em] text-emerald-300",
+											children: step.number
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "mt-1 text-[13px] font-bold text-foreground",
+											children: step.title
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "mt-1 text-[11px] leading-relaxed text-muted-foreground",
+											children: step.text
+										})
+									]
+								}, step.number))
+							})]
+						})
+					]
+				})
+			})]
+		})
+	});
+}
+var testimonials = [
+	{
+		content: "Ya había comprado tres extensiones que dejaban de funcionar después de pocos días. Super Lovable fue la primera que realmente se mantuvo estable. Hoy la uso prácticamente todo el día sin interrupciones.",
+		author: "Rafael M.",
+		role: "Afiliado y Gestor de Tráfico",
+		metric: "+180 proyectos",
+		image: "/rafael.png"
+	},
+	{
+		content: "Antes perdía horas esperando a que regresaran los créditos. Ahora puedo desarrollar una landing page completa y todavía terminar mi aplicación el mismo día.",
+		author: "Juliana S.",
+		role: "Infoproductora",
+		metric: "10 h ahorradas/semana",
+		image: "/juliana-s.png"
+	},
+	{
+		content: "No soy programador. La instalé, la activé y en pocos minutos ya la estaba usando normalmente. Mucho más simple de lo que imaginaba.",
+		author: "Carlos R.",
+		role: "Emprendedor Digital",
+		metric: "1.er proyecto en 15 min",
+		image: "/carlos-r.png"
+	},
+	{
+		content: "Solo lo que ahorré al dejar de pagar otras herramientas ya compensó la inversión. Valió cada centavo.",
+		author: "Marina A.",
+		role: "Dueña de E-commerce",
+		metric: "+R$ 2.300 ahorrados",
+		image: "/marina-a.png"
+	},
+	{
+		content: "Ahora puedo mantener varios proyectos abiertos al mismo tiempo sin preocuparme por gastar créditos. Mi productividad se multiplicó.",
+		author: "Eduardo P.",
+		role: "Freelancer",
+		metric: "Mucho más productividad",
+		image: "/eduardo-p.png"
+	},
+	{
+		content: "La cola automática y el optimizador de prompts cambiaron por completo mi flujo de trabajo. Ya no necesito estar pegada a la pantalla y el resultado de los proyectos es mucho mejor.",
+		author: "Fernanda L.",
+		role: "Diseñadora y Creadora de Apps",
+		metric: "+40 prompts/día",
+		image: "/fernanda-l.png"
+	}
+];
+function TestimonialsSection() {
+	const [isPaused, setIsPaused] = (0, import_react.useState)(false);
+	const extendedTestimonials = [...testimonials, ...testimonials];
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Section, {
+		id: "testimonios",
+		className: "overflow-hidden px-0 sm:px-0",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mx-auto flex max-w-6xl flex-col items-center px-5 text-center sm:px-8",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-primary",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "flex gap-0.5 text-amber-400",
+							children: [...Array(5)].map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { className: "h-3 w-3 fill-current" }, i))
+						}), "Más de 14.000 usuarios"]
+					}) }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
+						delay: 80,
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+							className: "mt-5 text-3xl font-semibold tracking-tight sm:text-4xl",
+							children: "Quienes la usan, la recomiendan."
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
+						delay: 160,
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "mt-4 max-w-2xl text-pretty text-base text-muted-foreground sm:text-lg",
+							children: "Miles de creadores, afiliados, infoproductores y emprendedores digitales ya usan Super Lovable a diario para desarrollar sin interrupciones."
+						})
+					})
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "relative left-1/2 mt-16 w-screen max-w-none -translate-x-1/2 overflow-hidden py-10",
+				onMouseEnter: () => setIsPaused(true),
+				onMouseLeave: () => setIsPaused(false),
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: cn("flex w-max gap-6 animate-infinite-scroll", isPaused && "pause-animation"),
+					children: extendedTestimonials.map((item, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
+						className: "glass-strong relative flex w-[320px] flex-col rounded-[2rem] p-6 shadow-glow-sm sm:w-[400px]",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "flex gap-0.5 text-amber-400",
+								children: [...Array(5)].map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { className: "h-4 w-4 fill-current" }, i))
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "mt-5 flex-1 text-[15px] leading-relaxed text-foreground/90",
+								children: [
+									"“",
+									item.content,
+									"”"
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "mt-8 flex items-center justify-between gap-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+										src: item.image,
+										alt: `Foto de ${item.author}`,
+										className: "h-10 w-10 rounded-full object-cover ring-1 ring-white/10",
+										loading: "lazy"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+										className: "text-[14px] font-semibold leading-none",
+										children: item.author
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "mt-1 text-[12px] text-muted-foreground",
+										children: item.role
+									})] })]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary ring-1 ring-primary/20",
+									children: item.metric
+								})]
+							})
+						]
+					}, index))
+				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "mx-auto mt-12 flex w-full max-w-6xl justify-center px-5",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "glass-strong flex w-fit flex-wrap items-center justify-center gap-x-6 gap-y-3 rounded-full px-8 py-4 text-center text-[13px] font-medium text-muted-foreground sm:text-[14px]",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "⭐ 4,9/5" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "+14.000 usuarios" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "+320 reseñas" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-primary",
+							children: "+97% la recomiendan"
+						})
+					]
+				})
+			})
+		]
+	});
+}
+var plans = [{
+	name: "Acceso por 30 días",
+	checkout: "https://app.ensinaflix.com/c/qzygzw1",
+	price: "R$ 19,90",
+	period: "30 días",
+	desc: "Usa todos los recursos de Super Lovable durante 30 días, con un único pago y sin renovación automática.",
+	perks: [
+		"Acceso completo por 30 días",
+		"Todas las funciones habilitadas",
+		"Actualizaciones incluidas durante el período",
+		"Cola automática y prompts optimizados",
+		"Instalación simple en pocos minutos",
+		"Funciona con cuentas gratuitas",
+		"Sin renovación automática"
+	],
+	badge: "30 días",
+	professional: false
+}, {
+	name: "Acceso de por vida",
+	checkout: "https://app.ensinaflix.com/c/xy3nvpg",
+	price: "R$ 49,90",
+	period: "pago único",
+	desc: "Paga una sola vez y usa Super Lovable sin fecha de vencimiento ni mensualidades.",
+	perks: [
+		"Acceso de por vida a Super Lovable",
+		"Todas las funciones habilitadas",
+		"Actualizaciones futuras incluidas",
+		"Cola automática y prompts optimizados",
+		"Instalación simple en pocos minutos",
+		"Funciona con cuentas gratuitas",
+		"Sin mensualidades ni renovaciones"
+	],
+	badge: "Mejor opción",
+	professional: true
+}];
+function PricingSection() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Section, {
+		id: "planos",
+		eyebrow: "Elige tu opción",
+		title: "Elige el acceso ideal para ti.",
+		subtitle: "30 días por R$ 19,90 o acceso de por vida por R$ 49,90. Sin renovación automática.",
+		className: "isolate overflow-hidden",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "mx-auto grid max-w-5xl items-stretch gap-5 lg:grid-cols-2",
+			children: plans.map((plan, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
+				delay: index * 100,
+				className: "h-full",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
+					className: cn("relative flex h-full flex-col overflow-hidden rounded-[1.8rem] border p-5 transition-transform duration-300 hover:-translate-y-1 sm:p-7", plan.professional ? "border-orange-400/55 bg-[linear-gradient(145deg,rgba(249,115,22,0.17),oklch(0.18_0.04_265/0.97))] shadow-[0_25px_90px_-42px_rgba(249,115,22,0.9)]" : "border-primary/40 bg-[linear-gradient(145deg,oklch(0.7_0.23_350/0.14),oklch(0.18_0.04_265/0.96))] shadow-glow"),
+					children: [
+						plan.professional && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "absolute right-4 top-4 rounded-full bg-orange-500 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.14em] text-white",
+							children: "Más completa"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: cn("mt-2 inline-flex w-fit rounded-full px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em]", plan.professional ? "bg-orange-500/15 text-orange-300" : "bg-primary/15 text-primary"),
+							children: plan.badge
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+							className: "mt-5 pr-24 text-2xl font-black leading-tight sm:text-3xl",
+							children: plan.name
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "mt-3 min-h-[3rem] text-sm leading-relaxed text-muted-foreground",
+							children: plan.desc
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "mt-6 flex items-end gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: cn("text-4xl font-black tracking-tight sm:text-5xl", plan.professional && "text-orange-400"),
+								children: plan.price
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "pb-1 text-xs text-muted-foreground",
+								children: ["/ ", plan.period]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+							className: "mt-7 flex-1 space-y-3",
+							children: plan.perks.map((perk) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+								className: "flex items-start gap-2.5 text-[13.5px] text-foreground/90",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/15",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, {
+										className: "h-3 w-3 text-primary",
+										strokeWidth: 3
+									})
+								}), perk]
+							}, perk))
+						}),
+						plan.professional && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "mt-6 rounded-xl border border-orange-500/20 bg-orange-500/[0.08] p-4",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-[12.5px] font-semibold leading-relaxed text-orange-100/90",
+								children: "Un único pago para usarla sin fecha de vencimiento, con todas las actualizaciones futuras incluidas y sin mensualidades."
+							})
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+							href: plan.checkout,
+							target: "_blank",
+							rel: "noopener noreferrer",
+							className: cn("mt-6 inline-flex h-13 w-full items-center justify-center gap-2 rounded-full px-5 text-sm font-black transition-all duration-300 hover:-translate-y-0.5", plan.professional ? "bg-orange-500 text-white" : "bg-brand text-primary-foreground"),
+							children: ["Quiero esta opción ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })]
+						})
+					]
+				})
+			}, plan.name))
+		})
+	});
+}
+function GuaranteeSection() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Section, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "glass-strong mx-auto flex max-w-3xl flex-col items-center gap-6 rounded-[2rem] bg-[linear-gradient(140deg,oklch(0.7_0.23_350/0.10),oklch(0.62_0.22_300/0.10))] px-6 py-12 text-center",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex h-44 w-44 flex-col items-center justify-center rounded-full border-[6px] border-double border-amber-400/80 bg-[conic-gradient(from_0deg,oklch(0.85_0.15_80),oklch(0.6_0.12_70),oklch(0.9_0.18_90),oklch(0.6_0.12_70),oklch(0.85_0.15_80))] text-amber-950 shadow-xl",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "text-[9px] font-black uppercase tracking-[0.2em]",
+						children: "100% SATISFACCIÓN"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "text-[42px] font-black leading-none",
+						children: "7"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "text-[12px] font-black uppercase tracking-[0.25em]",
+						children: "DÍAS"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "mt-2 bg-amber-900 px-3 py-1 text-[8px] font-black uppercase tracking-[0.1em] text-amber-100",
+						children: "O TE DEVOLVEMOS TU DINERO"
+					})
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+				className: "text-3xl font-semibold tracking-tight sm:text-4xl",
+				children: "Pruébala sin riesgo."
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "max-w-xl text-pretty text-base text-muted-foreground",
+				children: "Tienes siete días para solicitar la cancelación si no quedas satisfecho. Te devolvemos el 100% de lo pagado. Sin burocracia. Sin preguntas."
+			})
+		]
+	}) }) });
+}
+var faqs = [
+	["¿Funciona con la versión gratuita de Lovable?", "Sí. La extensión funciona con cualquier cuenta de Lovable, incluida la versión gratuita. No necesitas contratar ningún otro plan para usarla."],
+	["¿Necesito saber programación?", "No. Super Lovable fue creada para cualquier persona. La instalas, la activas y la usas."],
+	["¿Funciona con cualquier cuenta?", "Sí. Funciona normalmente con tu cuenta actual de Lovable, sin cambiar nada."],
+	["¿Cómo recibo mi licencia?", "Por correo electrónico, justo después de la confirmación del pago."],
+	["¿Cuánto tarda?", "Menos de un minuto entre instalarla, activarla y volver a crear."],
+	["¿Puedo cambiar de computadora?", "Sí. Solo tienes que instalar la extensión y activar tu licencia en el nuevo dispositivo."],
+	["¿Voy a necesitar comprar créditos?", "No. La idea es justamente que puedas producir sin depender de la barra de créditos."],
+	["¿Recibo actualizaciones?", "Sí. Las actualizaciones son automáticas y están incluidas en tu plan."],
+	["¿Es seguro?", "Sí. La extensión funciona en tu navegador y no modifica nada de tu cuenta."],
+	["¿Tiene garantía?", "Sí. Tienes siete días de garantía total. Si no te gusta, te devolvemos el 100% del valor."]
+];
+function FaqSection() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Section, {
+		id: "faq",
+		eyebrow: "FAQ",
+		title: "Preguntas frecuentes.",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Accordion, {
+			type: "single",
+			collapsible: true,
+			className: "mx-auto max-w-3xl",
+			children: faqs.map(([question, answer]) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(AccordionItem, {
+				value: question,
+				className: "glass mb-3 rounded-2xl border px-5 transition-colors hover:border-primary/25",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AccordionTrigger, {
+					className: "text-left text-[15px] font-medium hover:no-underline",
+					children: question
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AccordionContent, {
+					className: "text-[14px] leading-relaxed text-muted-foreground",
+					children: answer
+				})]
+			}, question))
+		}) })
+	});
+}
+function FinalCta() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		id: "cta-final",
+		className: "relative overflow-hidden px-5 py-24 sm:px-8 md:py-32",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,oklch(0.7_0.23_350/0.16),transparent_65%)]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Reveal, {
+			className: "relative mx-auto max-w-3xl text-center",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
+					className: "text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-5xl",
+					children: [
+						"El próximo proyecto que abandones por falta de créditos podría ser justamente el que ",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-gradient",
+							children: "cambie tu negocio"
+						}),
+						"."
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mx-auto mt-5 max-w-xl text-pretty text-base text-muted-foreground sm:text-lg",
+					children: "No vuelvas a detener tus ideas a mitad de camino. Instala Super Lovable y sigue creando de principio a fin, sin depender de créditos."
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CtaButton, {
+					href: "#planos",
+					size: "lg",
+					className: "mt-9",
+					children: ["QUIERO CREAR SIN LÍMITES ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4 transition-transform group-hover:translate-x-1" })]
+				})
+			]
+		})]
+	});
+}
+function Footer() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("footer", {
+		className: "border-t border-border/60 px-5 py-12 sm:px-8",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 md:flex-row",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+					href: "#topo",
+					className: "flex items-center gap-2.5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "bg-brand flex h-9 w-9 items-center justify-center rounded-xl",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-4.5 w-4.5 text-primary-foreground" })
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "text-[15px] font-semibold tracking-tight",
+						children: ["Super ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-gradient",
+							children: "Lovable"
+						})]
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {
+					className: "flex flex-wrap items-center justify-center gap-x-7 gap-y-2",
+					children: [
+						"Términos de uso",
+						"Política de privacidad",
+						"Contacto"
+					].map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+						href: "#topo",
+						className: "text-[13px] text-muted-foreground transition-colors hover:text-foreground",
+						children: item
+					}, item))
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "text-[12.5px] text-muted-foreground",
+					children: [
+						"© ",
+						(/* @__PURE__ */ new Date()).getFullYear(),
+						" Super Lovable. Todos los derechos reservados."
+					]
+				})
+			]
+		})
+	});
+}
+function LandingPage() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "min-h-screen bg-background text-foreground",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Header, {}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", { children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Hero, {}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ComparisonSection, {}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PricingSection, {}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TestimonialsSection, {}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(GuaranteeSection, {}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FaqSection, {}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FinalCta, {})
+			] }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Footer, {})
+		]
+	});
+}
+//#endregion
+export { LandingPage as component };

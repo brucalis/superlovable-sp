@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Check, Play, Shield, Sparkles, Star, Timer, X } from "lucide-react";
+import { ArrowRight, Check, Shield, Sparkles, Star, Timer, X } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -115,8 +115,6 @@ const heroSeals = [
 ];
 
 function Hero() {
-  const [videoStarted, setVideoStarted] = useState(false);
-
   return (
     <section id="topo" className="relative overflow-hidden px-5 pb-20 pt-16 sm:px-8 md:pb-28 md:pt-24">
       <div className="pointer-events-none absolute -top-40 left-1/2 h-[38rem] w-[70rem] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,oklch(0.7_0.23_350/0.16),transparent_65%)] blur-2xl" />
@@ -176,32 +174,13 @@ function Hero() {
         <Reveal delay={200} className="relative">
           <div className="glass-strong relative rounded-[2rem] p-3 shadow-glow">
             <div className="relative aspect-video w-full overflow-hidden rounded-[1.5rem] bg-black shadow-2xl">
-              {videoStarted ? (
-                <iframe
-                  src="https://www.youtube-nocookie.com/embed/ZXh1LKiESDs?autoplay=1&controls=1&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3"
-                  title="Conoce Super Lovable"
-                  className="absolute inset-0 h-full w-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                />
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setVideoStarted(true)}
-                  className="group absolute inset-0 w-full overflow-hidden text-left"
-                  aria-label="Reproducir video sobre Super Lovable"
-                >
-                  <img
-                    src="https://i.ytimg.com/vi/ZXh1LKiESDs/maxresdefault.jpg"
-                    alt="Mira el video y conoce Super Lovable"
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02] group-hover:brightness-75"
-                  />
-                  <span className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/10" />
-                  <span className="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-gradient-to-br from-[#ff2dbb] to-[#8b5cf6] text-white shadow-[0_0_35px_rgba(255,45,187,0.72)] ring-4 ring-white/20">
-                    <Play className="ml-1 h-9 w-9 fill-current" />
-                  </span>
-                </button>
-              )}
+              <img
+                src="/hero-superlovable.webp"
+                alt="Super Lovable ilimitada"
+                className="h-full w-full object-cover"
+                loading="eager"
+                fetchPriority="high"
+              />
             </div>
           </div>
         </Reveal>
